@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Friend App | Home</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'friends/css/style.css' %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #707070;
+        text-align: left;
+        padding: 8px;
+    }
+
+    td {
+        border-right: 1px solid #707070;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    button {
+        color: white;
+    }
+    </style>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <!-- <ul class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul> -->
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li>
+                        <form class="navbar-form form-inline pull-right" action="{% url 'manager:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+		<center><h4>Welcome, {{ request.session.name }}.</h4>
+        <p>Here is a list of your friends</p></center>
+
+            <div class="container">
+                <div class="container">
+
+                    <!-- users who are friends already -->
+                    <div class="row">
+                        <div class="col-6 col-lg-6">
+                            <center><h4 class="title">These aren't your friends yet</h4></center>
+                            <table>
+                                <tr>
+                                    <th><h4>Alias</h4></th>
+                                    <th><h4>Action</h4></th>
+                                </tr>
+                                <tr>
+                                {% for user in users %}
+
+                                    <td>{{user.alias}}</td>
+
+                                    <td>
+
+                                        <form action="{% url 'friends:add' user.id %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group ">
+                                                <button type="submit" class="btn-sm btn-block login-button">Add Friend</button>
+                                            </div>
+                                        </form>
+                                        <div class="form-group ">
+                                            <a href="{% url 'friends:view' user.id %}"><button class="btn-sm btn-block login-button">View Profile</button></a>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                            </table>
+
+                        </div>
+
+                        <!-- users who aren't friends yet -->
+                        <div class="col-6 col-lg-6">
+                            <center><h4 class="title">These are your current friends</h4></center>
+                            <table>
+                                <tr>
+                                    <th><h4>Alias</h4></th>
+                                    <th><h4>Action</h4></th>
+                                </tr>
+                                <tr>
+                                {% for friend in friends %}
+                                    <td>{{friend.alias}}</td>
+                                    <td>
+                                        <form action="{% url 'friends:remove' friend.id %}" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group ">
+                                                <button type="submit" class="btn-sm btn-block login-button">Remove</button>
+                                            </div>
+                                        </form>
+                                        <div class="form-group ">
+                                            <a href="{% url 'friends:view' friend.id %}"><button class="btn-sm btn-block login-button">View Profile</button></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static 'course_app/js/script.js' %}"></script>
+    </body>
+</html>
